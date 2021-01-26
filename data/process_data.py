@@ -40,6 +40,7 @@ def clean_data(df):
     dx:object
         dataframe with the cleaned data
     """
+
     # create a dataframe of the 36 individual category columns
     categories = df["categories"].str.split(";", expand=True)
 
