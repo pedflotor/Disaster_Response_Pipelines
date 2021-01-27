@@ -1,6 +1,5 @@
 import sys
 import pandas as pd
-import numpy as np
 from sqlalchemy import create_engine
 import nltk
 from nltk.tokenize import word_tokenize
@@ -11,10 +10,8 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.decomposition import TruncatedSVD
+from sklearn.ensemble import RandomForestClassifier
 import pickle
-import sqlite3
 nltk.download(['punkt', 'wordnet'])
 
 
@@ -30,9 +27,9 @@ def load_data(database_filepath):
 
     Returns
     -------
-    X:object
+    x:object
         dataframe with the features
-    Y:object
+    y:object
         dataframe with the target variables
     category_names:object
         dataframe with the target names
@@ -52,7 +49,8 @@ def load_data(database_filepath):
 
 def tokenize(text):
     """
-    Function to process the text data
+    Function to case normalize, lemmatize, and tokenize text using nltk
+    This function is used then in the machine learning pipeline to vectorize and then apply TF-IDF to the text
 
     Parameters
     ----------
@@ -62,7 +60,7 @@ def tokenize(text):
     Returns
     -------
     clean_tokens:object
-        text data tokenized, processed and ready to be used for the machine learning algorithm
+        text data tokenized, processed and ready to be used for the machine learning pipeline
     """
 
     tokens = word_tokenize(text)
@@ -75,15 +73,79 @@ def tokenize(text):
 
 
 def build_model():
-    pass
+    """
+    Function to builds a pipeline that processes text and then performs multi-output classification on the 36
+    categories in the dataset. GridSearchCV is used to find the best parameters for the model.
 
+    Parameters
+    ----------
+
+    Returns
+    -------
+    cv:object
+        machine learning model to be trained using GridSearchCV
+    """
+
+    pipeline = Pipeline([
+        ('vect', CountVectorizer(tokenizer=tokenize)),
+        ('tfidf', TfidfTransformer()),
+        ('clf', MultiOutputClassifier(RandomForestClassifier(verbose=1)))
+    ])
+
+    parameters = {'clf__estimator__max_depth': [4],
+                      'clf__estimator__min_samples_split': [4],
+                      'tfidf__use_idf': [False],
+                      'clf__estimator__n_estimators': [100]}
+
+    cv = GridSearchCV(pipeline, param_grid=parameters, return_train_score=True, verbose=2, n_jobs=-1)
+    return cv
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    pass
+    """
+    Function to Prints the f1 score, precision and recall for the test set for each category
+
+    Parameters
+    ----------
+    model:object
+        machine learning model build with the build_model function
+    X_test:object
+        dataframe with the features
+    Y_test:object
+        dataframe with the target variables
+    category_names:object
+        dataframe with the target names
+
+    Returns
+    -------
+    Prints the f1 score, precision and recall for the test set for each category
+    """
+
+    Y_pred = model.predict(X_test)
+
+    for i, col in enumerate(Y_test):
+        print(col)
+        print(classification_report(Y_test[col], Y_pred[:, i]))
 
 
 def save_model(model, model_filepath):
-    pass
+    """
+        Function to store the classifier into a pickle file to the specified model file path.
+
+        Parameters
+        ----------
+        model:object
+            machine learning model build with the build_model function
+        X_test:object
+            dataframe with the features
+        model_filepath:str
+            path of the pickle file where the classifier will be stored
+        Returns
+        -------
+        Pickle file
+        """
+
+    with open('disaster_model.pkl', 'wb') as model_filepath:
+        pickle.dump(model, model_filepath)
 
 
 def main():
