@@ -44,43 +44,74 @@ model = joblib.load("../models/disaster_model.pkl")
 @app.route('/index')
 def index():
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
 
-    # Most frequent categories
-    df_categories = df.drop(['id'], axis=1)._get_numeric_data()
-    top_categories_pcts = df_categories.sum().sort_values(ascending=False).head(15)
-    top_categories_names = list(top_categories_pcts.index)
+    # Most repeated categories
+    df_cat = df.drop(['id'], axis=1)._get_numeric_data()
+    top_cat_pcts = df_cat.sum().sort_values(ascending=False).head(25)
+    top_cat_names = list(top_cat_pcts.index)
 
-    # Most frequent words
-    social_media_messages = ' '.join(df[df['buildings'].astype(str) == '1']['message'])
-    print('Tokenize messages...15% completed')
-    tokens_partial = [w for w in word_tokenize(social_media_messages.lower()) if w.isalpha()]
-    print('Removing stopwords...30% completed')
-    cachedStopWords = stopwords.words("english")
-    text_partial = [word for word in tokens_partial if word not in cachedStopWords]
-    print('Removing most common words...45% completed')
-    social_media_wrd_counter = Counter(text_partial).most_common()
-    social_media_wrd_cnt = [i[1] for i in social_media_wrd_counter]
-    social_media_wrd_pct = [i / sum(social_media_wrd_cnt) * 100 for i in social_media_wrd_cnt]
-    social_media_wrds = [i[0] for i in social_media_wrd_counter]
+    def filter_words(text):
+        """
+        Function to case normalize, lemmatize, remove stopwords and tokenize text using nltk
+        It also calculates the percentage that each word represents in the total, taken into account all the words found
 
-    # Most frequent words
+        Parameters
+        ----------
+        text:object
+          text data with the raw messages that will be processed
+
+     Returns
+        -------
+        word_percentage:list
+          list of the percentages that each word have between all words found
+        words: object
+          list of words ordered from the most repeated one
+      """
+
+        tokens = [w for w in word_tokenize(text.lower()) if w.isalpha()]
+        print('Removing stopwords...30% completed')
+        cachedStopWords = stopwords.words("english")
+        text_processed = [word for word in tokens if word not in cachedStopWords]
+        print('Removing most common words...60% completed')
+        word_counter = Counter(text_processed).most_common()
+        print('Removing most common words...100% completed')
+        word_count = [i[1] for i in word_counter]
+        word_percentage = [i / sum(word_count) * 100 for i in word_count]
+        words = [i[0] for i in word_counter]
+
+        return word_percentage, words
+
+    print('Number of tasks to be completed: 5')
+    print('Estimated time of completion: 40 seconds')
+    # Most frequent words when buildings is set to 1
+    print('Task 1')
+    b_messages = ' '.join(df[df['buildings'].astype(str) == '1']['message'])
+    b_pct, b_wrd = filter_words(b_messages)
+    # Most frequent words when buildings is set to 0
+    print('Task 2')
+    b_n_messages = ' '.join(df[df['buildings'].astype(str) == '0']['message'])
+    b_n_pct, b_n_wrd = filter_words(b_n_messages)
+
+    # Most frequent words when related is set to 1 and 2
+    print('Task 3')
+    r_n_messages_1 = ' '.join(df[df['related'].astype(str) == '1']['message'])
+    r_n_messages_2 = ' '.join(df[df['related'].astype(str) == '2']['message'])
+    r_messages = r_n_messages_1 + r_n_messages_2
+    r_pct, r_wrd = filter_words(r_messages)
+
+    # Most frequent words when related is set to 0
+    print('Task 4')
+    r_n_messages = ' '.join(df[df['related'].astype(str) == '0']['message'])
+    r_n_pct, r_n_wrd = filter_words(r_n_messages)
+
+    # Most frequent words in all the messages
+    print('Task 5')
     messages = ' '.join(df['message'])
-    print('Tokenize messages...60% completed')
-    tokens = [w for w in word_tokenize(messages.lower()) if w.isalpha()]
-    print('Removing stopwords...75% completed')
-    cachedStopWords = stopwords.words("english")
-    text = [word for word in tokens if word not in cachedStopWords]
-    print('Removing most common words...100% completed')
-    wrd_counter = Counter(text).most_common()
-    wrd_cnt = [i[1] for i in wrd_counter]
-    wrd_pct = [i / sum(wrd_cnt) * 100 for i in wrd_cnt]
-    wrds = [i[0] for i in wrd_counter]
+    wrd_pct, wrds = filter_words(messages)
 
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
@@ -103,13 +134,13 @@ def index():
         {
             'data': [
                 Bar(
-                    x=top_categories_names,
-                    y=top_categories_pcts
+                    x=top_cat_names,
+                    y=top_cat_pcts
                 )
             ],
 
             'layout': {
-                'title': 'Top 15 Message Categories',
+                'title': 'Top 25 Message Categories',
                 'yaxis': {
                     'title': "Count"
                 },
@@ -121,17 +152,34 @@ def index():
         {
             'data': [
                 Bar(
-                    x=social_media_wrds[:25],
-                    y=social_media_wrd_pct[:25]
+                    x=b_wrd[:8],
+                    y=b_pct[:8]
                 )
             ],
 
             'layout': {
-                'title': "Top 25 Keywords in Buildings category",
+                'title': "Top 8 Keywords in Buildings category",
                 'xaxis': {'tickangle': 60
                           },
                 'yaxis': {
-                    'title': "% Total Social Media Messages"
+                    'title': "% Total Building Messages"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=b_n_wrd[:8],
+                    y=b_n_pct[:8]
+                )
+            ],
+
+            'layout': {
+                'title': "Top 8 Keywords not in building category",
+                'xaxis': {'tickangle': 60
+                          },
+                'yaxis': {
+                    'title': "% Total not Building Messages"
                 }
             }
         },
@@ -148,7 +196,41 @@ def index():
                 'xaxis': {'tickangle': 60
                           },
                 'yaxis': {
-                    'title': "% Total Social Media Messages"
+                    'title': "% Total Messages"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=r_wrd[:8],
+                    y=r_pct[:8]
+                )
+            ],
+
+            'layout': {
+                'title': "Top 8 Keywords in Related category",
+                'xaxis': {'tickangle': 60
+                          },
+                'yaxis': {
+                    'title': "% Total Related Messages"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=r_n_wrd[:8],
+                    y=r_n_pct[:8]
+                )
+            ],
+
+            'layout': {
+                'title': "Top 8 Keywords not in Related category",
+                'xaxis': {'tickangle': 60
+                          },
+                'yaxis': {
+                    'title': "% Total not Related Messages"
                 }
             }
         }
