@@ -152,6 +152,23 @@ def index():
         {
             'data': [
                 Bar(
+                    x=wrds[:25],
+                    y=wrd_pct[:25]
+                )
+            ],
+
+            'layout': {
+                'title': "Top 25 Keywords in the messages",
+                'xaxis': {'tickangle': 60
+                          },
+                'yaxis': {
+                    'title': "% Total Messages"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
                     x=b_wrd[:8],
                     y=b_pct[:8]
                 )
@@ -180,23 +197,6 @@ def index():
                           },
                 'yaxis': {
                     'title': "% Total not Building Messages"
-                }
-            }
-        },
-        {
-            'data': [
-                Bar(
-                    x=wrds[:25],
-                    y=wrd_pct[:25]
-                )
-            ],
-
-            'layout': {
-                'title': "Top 25 Keywords in the messages",
-                'xaxis': {'tickangle': 60
-                          },
-                'yaxis': {
-                    'title': "% Total Messages"
                 }
             }
         },
