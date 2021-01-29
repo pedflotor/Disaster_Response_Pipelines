@@ -9,8 +9,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import classification_report
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, accuracy_score
+from sklearn.ensemble import AdaBoostClassifier
 import pickle
 nltk.download(['punkt', 'wordnet'])
 
@@ -42,9 +42,8 @@ def load_data(database_filepath):
 
     x = df["message"]
     y = df.drop(['id', 'message', 'original', 'genre'], axis=1)
-    category_names = y.columns
 
-    return x, y, category_names
+    return x, y, y.columns
 
 
 def tokenize(text):
@@ -63,12 +62,16 @@ def tokenize(text):
         text data tokenized, processed and ready to be used for the machine learning pipeline
     """
 
+    #tokenize text
     tokens = word_tokenize(text)
+    # initiate lemmatizer
     lemmatizer = WordNetLemmatizer()
+
     clean_tokens = []
     for tok in tokens:
         clean_tok = lemmatizer.lemmatize(tok).lower().strip()
         clean_tokens.append(clean_tok)
+
     return clean_tokens
 
 
@@ -89,15 +92,15 @@ def build_model():
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
-        ('clf', MultiOutputClassifier(RandomForestClassifier(verbose=1)))
+        ('clf', MultiOutputClassifier(AdaBoostClassifier()))
     ])
 
-    parameters = {'clf__estimator__max_depth': [4],
-                      'clf__estimator__min_samples_split': [4],
-                      'tfidf__use_idf': [False],
-                      'clf__estimator__n_estimators': [100]}
+    parameters = {'tfidf__use_idf': [True, False],
+                   'clf__estimator__n_estimators': [100, 200, 300],
+                   'clf__estimator__learning_rate': [0.8, 1]}
 
     cv = GridSearchCV(pipeline, param_grid=parameters, return_train_score=True, verbose=2, n_jobs=-1)
+
     return cv
 
 def evaluate_model(model, X_test, Y_test, category_names):
@@ -118,6 +121,7 @@ def evaluate_model(model, X_test, Y_test, category_names):
     Returns
     -------
     Prints the f1 score, precision and recall for the test set for each category
+    The accuracy for each category is also printed
     """
 
     Y_pred = model.predict(X_test)
@@ -125,6 +129,10 @@ def evaluate_model(model, X_test, Y_test, category_names):
     for i, col in enumerate(Y_test):
         print(col)
         print(classification_report(Y_test[col], Y_pred[:, i]))
+
+    print("Accuracy scores for each category\n")
+    for i in range(36):
+        print("Accuracy score for " + Y_test.columns[i], accuracy_score(Y_test.values[:, i], Y_pred[:, i]))
 
 
 def save_model(model, model_filepath):
