@@ -42,6 +42,6 @@ The project has 3 main parts:
 3. Go to http://0.0.0.0:3001/
 
 ### Website:
-![Dataset_insights_1](https://github.com/pedflotor/Disaster_Response_Pipelines/Pics/Dataset_insights_1.png)
-![Dataset_insights_2](https://github.com/pedflotor/Disaster_Response_Pipelines/Pics/Dataset_insights_2.png)
-![Message_Categorization](https://github.com/pedflotor/Disaster_Response_Pipelines/Pics/Message_Categorization.png)
+![Dataset_insights_1](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/Pics/Dataset_insights_1.png)
+![Dataset_insights_2](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/Pics/Dataset_insights_2.png)
+![Message_Categorization](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/Pics/Message_Categorization.png)
