@@ -44,4 +44,5 @@ The project has 3 main parts:
 ### Website:
 ![Dataset_insights_1](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/Pics/Dataset_insights_1.png)
 ![Dataset_insights_2](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/Pics/Dataset_insights_2.png)
-![Message_Categorization](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/Pics/Message_Categorization.png)
+![Message_Categorization_1](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/Pics/Message_Categorization_1.png)
+![Message_Categorization_2](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/Pics/Message_Categorization_2.png)
