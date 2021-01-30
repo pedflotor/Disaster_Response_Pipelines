@@ -29,16 +29,16 @@ The project has 3 main parts:
     + Includes data visualizations using Plotly
 
 ## Files in the repository
-* /app/templates/go.html: web page that handles user query and displays model results
-* /app/templates/master.html: index webpage displays visuals and receives user input text for model
-* /app/run.py: flask application to run the web
-* /data/disaster_categories.csv: categories dataset
-* /data/disaster_messages.csv: messages dataset
-* /data/DisasterResponse.db: SQLite database containing the merged dataset
-* /data/process_data.csv: data cleaning ETL pipeline that merges the two dataset aforementioned
-* /models/classifier.pkl: classifier model as a pickle file
-* /models/train_classifier.py: machine learning pipeline that builds the classifier model aforementioned
-* /README.md: description of the project
+* app/templates/go.html: web page that handles user query and displays model results
+* app/templates/master.html: index webpage displays visuals and receives user input text for model
+* app/run.py: flask application to run the web
+* data/disaster_categories.csv: categories dataset
+* data/disaster_messages.csv: messages dataset
+* data/DisasterResponse.db: SQLite database containing the merged dataset
+* data/process_data.csv: data cleaning ETL pipeline that merges the two dataset aforementioned
+* models/classifier.pkl: classifier pickle file model
+* models/train_classifier.py: machine learning pipeline that builds the classifier model aforementioned
+* README.md: description of the project
 
 ## Instructions
 1. Run the following commands in the project's root directory to set up your database and model:
