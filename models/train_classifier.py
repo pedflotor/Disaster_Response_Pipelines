@@ -62,7 +62,7 @@ def tokenize(text):
         text data tokenized, processed and ready to be used for the machine learning pipeline
     """
 
-    #tokenize text
+    # tokenize text
     tokens = word_tokenize(text)
     # initiate lemmatizer
     lemmatizer = WordNetLemmatizer()
@@ -102,6 +102,7 @@ def build_model():
     cv = GridSearchCV(pipeline, param_grid=parameters, return_train_score=True, verbose=2, n_jobs=-1)
 
     return cv
+
 
 def evaluate_model(model, X_test, Y_test, category_names):
     """
