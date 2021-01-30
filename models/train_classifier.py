@@ -64,6 +64,7 @@ def tokenize(text):
 
     # tokenize text
     tokens = word_tokenize(text)
+
     # initiate lemmatizer
     lemmatizer = WordNetLemmatizer()
 
