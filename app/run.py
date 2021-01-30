@@ -190,7 +190,7 @@ def index():
             ],
 
             'layout': {
-                'title': "Top 8 Keywords not in building category",
+                'title': "Top 8 Keywords not in Buildings category",
                 'xaxis': {'tickangle': 60
                           },
                 'yaxis': {
