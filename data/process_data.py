@@ -56,7 +56,7 @@ def clean_data(df):
     # convert category values to just numbers 0 or 1
     for column in categories:
         # set each value to be the last character of the string
-        categories[column] = categories[column].astype(str).str[-1]
+        categories[column] = categories[column].apply(lambda x: x.split('-')[1] if int(x.split('-')[1]) < 2 else 1)
 
         # convert column from string to numeric
         categories[column] = categories[column].astype(int)
