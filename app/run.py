@@ -1,20 +1,18 @@
 import json
 import plotly
 import pandas as pd
-
 import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from collections import Counter
-
-nltk.download(['stopwords'])
 from nltk.corpus import stopwords
-
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
-from sklearn.externals import joblib
+import joblib
 from sqlalchemy import create_engine
+nltk.download(['stopwords'])
+
 
 app = Flask(__name__)
 
@@ -32,11 +30,11 @@ def tokenize(text):
 
 
 # load data
-engine = create_engine('sqlite:///../data/DisasterResponse.db')
+engine = create_engine('sqlite:///data/DisasterResponse.db')
 df = pd.read_sql_table('DisasterResponse', engine)
 
 # load model
-model = joblib.load("../models/disaster_model.pkl")
+model = joblib.load("models/disaster_model.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -85,10 +83,12 @@ def index():
 
     print('Number of tasks to be completed: 5')
     print('Estimated time of completion: 40 seconds')
+
     # Most frequent words when buildings is set to 1
     print('Task 1')
     b_messages = ' '.join(df[df['buildings'].astype(str) == '1']['message'])
     b_pct, b_wrd = filter_words(b_messages)
+
     # Most frequent words when buildings is set to 0
     print('Task 2')
     b_n_messages = ' '.join(df[df['buildings'].astype(str) == '0']['message'])
