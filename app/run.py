@@ -94,11 +94,9 @@ def index():
     b_n_messages = ' '.join(df[df['buildings'].astype(str) == '0']['message'])
     b_n_pct, b_n_wrd = filter_words(b_n_messages)
 
-    # Most frequent words when related is set to 1 and 2
+    # Most frequent words when related is set to 1
     print('Task 3')
-    r_n_messages_1 = ' '.join(df[df['related'].astype(str) == '1']['message'])
-    r_n_messages_2 = ' '.join(df[df['related'].astype(str) == '2']['message'])
-    r_messages = r_n_messages_1 + r_n_messages_2
+    r_messages = ' '.join(df[df['related'].astype(str) == '1']['message'])
     r_pct, r_wrd = filter_words(r_messages)
 
     # Most frequent words when related is set to 0
