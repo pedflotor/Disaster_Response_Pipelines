@@ -28,7 +28,7 @@ The project has 3 main parts:
     different categories
     + Includes data visualizations using Plotly
 
-### Files in the repository
+## Files in the repository
 * /app/templates/go.html: web page that handles user query and displays model results
 * /app/templates/master.html: index webpage displays visuals and receives user input text for model
 * /app/run.py: flask application to run the web
@@ -40,7 +40,7 @@ The project has 3 main parts:
 * /models/train_classifier.py: machine learning pipeline that builds the classifier model aforementioned
 * /README.md: description of the project
 
-### Instructions
+## Instructions
 1. Run the following commands in the project's root directory to set up your database and model:
     - To run the ETL pipeline that cleans the data and stores it in a SQLite database:
         `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
@@ -52,7 +52,7 @@ The project has 3 main parts:
 
 3. Go to http://0.0.0.0:3001/
 
-### Website
+## Website
 ![Dataset_insights_1](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/pics/Dataset_insights_1.png)
 ![Dataset_insights_2](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/pics/Dataset_insights_2.png)
 ![Message_Categorization_1](https://github.com/pedflotor/Disaster_Response_Pipelines/blob/main/pics/Message_Categorization_1.png)
