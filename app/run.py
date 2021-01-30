@@ -64,7 +64,7 @@ def index():
         -------
         word_percentage:list
           list of the percentages that each word have between all words found
-        words: object
+        words: list
           list of words ordered from the most repeated one
       """
 
