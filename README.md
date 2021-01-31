@@ -1,9 +1,10 @@
 # Disaster Response Pipelines
 Udacity's Data Science Nanodegree project. 
-Here an ETL will be built to read the dataset provided, clean the data, and store it in a SQLite database. Then a 
-machine learning pipeline will be created that uses NLTK as well as scikit-learn's Pipeline and GridSearchCV to 
+
+An ETL pipeline is built to read the dataset provided, clean the data, and store it in a SQLite database. Then a 
+machine learning pipeline is created that uses NLTK as well as scikit-learn's Pipeline and GridSearchCV to 
 output a final model that uses the message column to predict classifications for 36 categories (multi-output 
-classification). The model will be exported to a pickle file and in the last step, the results will be displayed 
+classification). The model is then exported to a pickle file and in the last step, the results are displayed 
 in a Flask web app
 
 ## Project Components
